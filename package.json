@@ -1,0 +1,10 @@
+{
+  "name": "uni-player",
+  "version": "1.0.0",
+  "description": "a video player",
+  "main": "src/main.ts",
+  "repository": "https://github.com/liuhaijundegithub/uni-player",
+  "author": "ORIGINALFAKER",
+  "license": "MIT",
+  "private": false
+}
