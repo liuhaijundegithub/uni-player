@@ -1,3 +1,4 @@
-export default class UniPlayer {
-  // TODO
-};
+import UniPlayer from "./lib/core";
+import './style/index.css';
+
+export default UniPlayer;
