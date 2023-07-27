@@ -1,6 +1,6 @@
 import { isValidContainer } from '../utils/is';
 import { UniPlayerConfig, UniPlayerStatus } from '../../types/UniPlayer';
-import { init } from '../utils/render';
+import render from '../utils/render';
 import { getWrapper } from '../utils/index';
 
 class UniPlayer {
@@ -14,7 +14,7 @@ class UniPlayer {
       container
     } = this.config;
     if (isValidContainer(container)) {
-      const { videoEl } = init(
+      const { videoEl } = render(
         getWrapper(container) as HTMLElement,
         config
       );
