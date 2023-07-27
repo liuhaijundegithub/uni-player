@@ -61,9 +61,12 @@
 .iconfont {
   color: #fff;
   cursor: pointer;
-  font-family: "iconfont" !important;
   height: 25px;
   width: 25px;
+  filter: brightness(.9);
+}
+.iconfont:hover {
+  filter: unset;
 }
 .iconfont img {
   height: 26px;
@@ -108,9 +111,15 @@
 .uni-player-wrapper .uni-player-toolbar .progress {
   height: 2px;
   position: absolute;
-  top: 0;
+  top: -1px;
   left: 15px;
   right: 15px;
   background: rgba(149, 149, 149, .5);
   border-radius: 2px;
+  cursor: pointer;
+}
+
+.uni-player-wrapper .uni-player-toolbar .progress:hover {
+  height: 4px;
+  top: -3px;
 }
