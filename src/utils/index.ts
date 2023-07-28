@@ -45,6 +45,16 @@ export const generateBigPauseIcon = () => {
   return string2HtmlNode(string);
 }
 
+export const generatePlayedProgress = () => {
+  const string = '<div class="progress-played"></div>';
+  return string2HtmlNode(string);
+}
+
+export const generateBufferProgress = () => {
+  const string = '<div class="progress-buffer"></div>';
+  return string2HtmlNode(string);
+};
+
 export const formatTime = (millisecond: number) => {
   if (millisecond === undefined) return '-';
   const days = parseInt(String(millisecond / (1000 * 60 * 60 * 24)));
@@ -68,4 +78,49 @@ export const generateTime = () => {
 export const generateProgress = () => {
   const string = '<div class="progress"></div>';
   return string2HtmlNode(string);
+}
+
+// 生成全部的进度条
+
+export const generateFullProgress = () => {
+  const string = '<div class="progress-full"></div>';
+  return string2HtmlNode(string);
+};
+
+export const generateBar = () => {
+  const string = '<div class="progress-bar"></div>';
+  return string2HtmlNode(string);
+}
+
+export const setBarPosition = (
+  bar: HTMLElement,
+  value: number,
+  videoEl?: HTMLVideoElement,
+  allWidth?: number,
+  videoTime?: number
+) => {
+  let transforms = bar.style.transform.split(' ');
+  if (transforms.some(i => i.includes('translateX'))) {
+    transforms = transforms.filter(i => !i.includes('translateX') && Boolean(i));
+    transforms.push(`translateX(${value}px)`);
+  } else {
+    transforms.push(`translateX(${value}px)`);
+  }
+  bar.style.transform = transforms.join(' ');
+
+  if (videoEl && allWidth && videoTime) {
+    const t = (videoTime * ((value < 0 ? 0 : value) / allWidth));
+    if (t) videoEl.currentTime = t;
+  }
+};
+
+export const toogleBarScale = (bar: HTMLElement, hide: boolean, transtion = false) => {
+  let transforms = bar.style.transform.split(' ');
+  transforms = transforms.filter(i => i !== `scale(${hide ? 1 : 0})` && Boolean(i));
+  transforms.push(`scale(${hide ? 0 : 1})`);
+  bar.style.transform = transforms.join(' ');
+  // bar.ontransitionend = function () {
+  //   bar.classList.remove('transtion');
+  //   bar.ontransitionend = null;
+  // }
 }
