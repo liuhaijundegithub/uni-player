@@ -8,3 +8,32 @@ export interface UniPlayerConfig {
 
 export interface UniPlayerStatus extends UniPlayerConfig {
 }
+
+export interface El {
+  allEls: DocumentFragment;
+  videoEl: HTMLVideoElement;
+  videoWrapperEl: HTMLElement;
+  pausedIcon: HTMLElement;
+  toolbarEl: HTMLElement;
+  timeEl: HTMLElement;
+  toolbarElLeft: HTMLElement;
+  toolbarElRight: HTMLElement;
+  progress: HTMLElement;
+  progressFull: HTMLElement;
+  progresPlayed: HTMLElement;
+  progresBuffer: HTMLElement;
+  pauseBtn: HTMLElement;
+  playBtn: HTMLElement;
+  bar: HTMLElement;
+}
+
+export interface ToolConst {
+  duration: string;
+  playerWidth: number;
+  isMouseMoving: boolean;
+  playerClientLeft: number;
+  maxRange: number;
+  videoTime: number;
+  clickTimer: number;
+  toolBarTimer: number;
+}

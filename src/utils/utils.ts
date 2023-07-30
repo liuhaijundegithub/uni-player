@@ -15,7 +15,7 @@ export const throttle = (func: Function, wait = 50) => {
 /**
  * @description 判断鼠标是不是在目标元素内
  */
-export const checkIn = (obj: HTMLElement) => {
+export const checkIfPointerInside = (obj: HTMLElement) => {
     var x = Number(window.event.clientX) // 鼠标相对屏幕横坐标
     var y = Number(window.event.clientY) // 鼠标相对屏幕纵坐标
 
@@ -35,3 +35,18 @@ export const checkIn = (obj: HTMLElement) => {
         return false
     }
 }
+
+export const formatTime = (millisecond: number) => {
+    if (millisecond === undefined) return '-';
+    const days = parseInt(String(millisecond / (1000 * 60 * 60 * 24)));
+    const hours = parseInt(String((millisecond % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
+    const minutes = parseInt(String((millisecond % (1000 * 60 * 60)) / (1000 * 60)));
+    const seconds = (millisecond % (1000 * 60)) / 1000;
+
+    let s = '';
+    if (days > 0) s += ('0' + days).slice(-2) + ':';
+    if (hours > 0) s += ('0' + hours).slice(-2) + ':';
+    if (minutes > 0) s += ('0' + minutes).slice(-2) + ':';
+    if (seconds > 0) s += ('0' + seconds.toFixed(0)).slice(-2);
+    return s;
+};

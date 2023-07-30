@@ -5,7 +5,7 @@ import { getWrapper } from '../utils/index';
 
 class UniPlayer {
   private config: UniPlayerStatus
-  private videoEl: HTMLVideoElement;
+  private videoEl: HTMLVideoElement | undefined;
   constructor (config: UniPlayerConfig) {
     this.config = {
       ...config
@@ -23,11 +23,11 @@ class UniPlayer {
   }
 
   play () {
-    this.videoEl.play();
+    this.videoEl?.play();
   }
 
   pause () {
-    this.videoEl.pause();
+    this.videoEl?.pause();
   }
 }
 

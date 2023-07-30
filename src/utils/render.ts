@@ -1,301 +1,129 @@
 import { UniPlayerConfig } from '../../types/UniPlayer';
 import {
-  string2HtmlNode,
   generatePlayBtn,
   generatePauseBtn,
   generateToolbarLeftWrapper,
   generateToolbarRightWrapper,
   generateBigPauseIcon,
-  formatTime,
   generateTime,
   generateProgress,
   generateFullProgress,
   generateBar,
-  setBarPosition,
-  toogleBarScale,
   generatePlayedProgress,
-  generateBufferProgress
+  generateBufferProgress,
+  generateVideoEl,
+  generateToolbar,
+  generateVideoWrapperEl
 } from './index';
-import { elIsFullScreen } from './is';
-import { checkIn } from './utils';
+import { formatTime } from './utils'
 
-const videoWrapperString = '<div class="uni-player-wrapper"></div>';
+import { El, ToolConst } from '../../types/UniPlayer';
 
-function fullScreen (el: HTMLElement) {
-  if (elIsFullScreen()) {
-    document.exitFullscreen();
-  } else {
-    el.requestFullscreen();
-  }
-}
+import bindBaseEvents from '../events/base';
+import bindToolbarEvents, { toogleBarScale } from '../events/toolbar';
 
-function generateToolbar () {
-  const toolBarWrapperString = '<div class="uni-player-toolbar"></div>"'
-  return string2HtmlNode(toolBarWrapperString);
-};
-
-let duration = '';
-
-let playerWidth = 0;
-
-let isMouseMoving = false;
-
-let playerClientLeft = 0;
-
-let maxRange = 0; // 可以滑动的最大宽度
-
-let videoTime = 0;
+import { setTime, setBarPosition } from './videoBehavior'
 
 
-const render = (el: HTMLElement, config: UniPlayerConfig) => {
-  el.classList.add('uni-player');
-  const videoEl = string2HtmlNode('<video></video>') as HTMLVideoElement;
-  videoEl.controls = false;
 
-  const allEls = document.createDocumentFragment();
-
-  const videoWrapperEl = string2HtmlNode(videoWrapperString);
-
-  const pausedIcon = generateBigPauseIcon();
-  allEls.append(pausedIcon);
-
-  const toolbarEl = generateToolbar(); // toolbar wrapper
-  const toolbarElLeft = generateToolbarLeftWrapper();
-  const toolbarElRight = generateToolbarRightWrapper();
-  const progress = generateProgress();
-  const progressFull = generateFullProgress();
-  const progresPlayed = generatePlayedProgress();
-  const progresBuffer = generateBufferProgress();
-  const bar = generateBar();
-  progress.appendChild(progressFull);
-  progress.appendChild(progresPlayed);
-  progress.appendChild(progresBuffer);
-  progress.appendChild(bar);
-
-  toolbarEl.appendChild(toolbarElLeft);
-  toolbarEl.appendChild(toolbarElRight);
-  toolbarEl.appendChild(progress);
-
-  toolbarEl.onclick = e => e.stopPropagation();
-
-  const playBtn = generatePlayBtn();
-  progress.addEventListener('click', function (e) {
-    e.stopPropagation();
-    if (isMouseMoving) return false;
-    const x = e.clientX;
-    const position = x - playerClientLeft - 10 - 12;
-    setBarPosition(bar, position, videoEl, maxRange, videoTime);
-    toogleBarScale(bar, false);
-    setPlayedProgress(position);
-  })
-  playBtn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    videoEl.play();
-  })
-  const pauseBtn = generatePauseBtn();
-  pauseBtn.addEventListener('click', function (e) {
-    e.stopPropagation();
-    videoEl.pause();
-  })
-
-  // 播放时间
-  const timeEl = generateTime();
-
-  toolbarElLeft.appendChild(playBtn);
-  toolbarElLeft.appendChild(pauseBtn);
-  toolbarElLeft.appendChild(timeEl);
+const render = (container: HTMLElement, config: UniPlayerConfig) => {
 
 
-  allEls.append(toolbarEl);
+  const toolConst: ToolConst = {
+    duration: '',
+    playerWidth: 0,
+    isMouseMoving: false,
+    playerClientLeft: 0,
+    maxRange: 0, // 可以滑动的最大宽度
+    videoTime: 0,
+    clickTimer: -1,
+    toolBarTimer: -1
+  };
+  container.classList.add('uni-player');
 
-  videoEl.onplay = () => {
-    playBtn.classList.add('hide');
-    pauseBtn.classList.remove('hide');
-    pausedIcon.classList.add('hide');
-  }
-  videoEl.onpause = () => {
-    pauseBtn.classList.add('hide');
-    playBtn.classList.remove('hide');
-    pausedIcon.classList.remove('hide');
-  }
+  const el: El = {
+    allEls: document.createDocumentFragment(),
+    videoEl:  generateVideoEl(),
+    videoWrapperEl: generateVideoWrapperEl(),
+    pausedIcon: generateBigPauseIcon(),
+    toolbarEl: generateToolbar(),
+    toolbarElLeft: generateToolbarLeftWrapper(),
+    toolbarElRight: generateToolbarRightWrapper(),
+    progress: generateProgress(),
+    progressFull: generateFullProgress(),
+    progresPlayed: generatePlayedProgress(),
+    progresBuffer: generateBufferProgress(),
+    pauseBtn: generatePauseBtn(),
+    playBtn: generatePlayBtn(),
+    bar: generateBar(),
+    timeEl: generateTime() // 播放时间
+  };
 
-  let clickTimer: NodeJS.Timer;
-  let toolBarTimer: NodeJS.Timer;
+  el.videoEl.controls = false; // 关闭默认播放器控件
+  el.allEls.append(el.pausedIcon);
+  el.progress.appendChild(el.progressFull);
+  el.progress.appendChild(el.progresPlayed);
+  el.progress.appendChild(el.progresBuffer);
+  el.progress.appendChild(el.bar);
+  el.toolbarEl.appendChild(el.toolbarElLeft);
+  el.toolbarEl.appendChild(el.toolbarElRight);
+  el.toolbarEl.appendChild(el.progress);
+  el.toolbarElLeft.appendChild(el.playBtn);
+  el.toolbarElLeft.appendChild(el.pauseBtn);
+  el.toolbarElLeft.appendChild(el.timeEl);
 
-  function setVideoPlay () {
-    videoEl.play();
-  }
-  function setVideoPause () {
-    videoEl.pause();
-  }
 
-  function setTime () {
-    const currentTime = formatTime(videoEl.currentTime * 1000);
-    const html = currentTime.padStart(duration.length, '00:') + '<span class="dash">/</span>' + duration;
-    timeEl.innerHTML = html;
-  }
+  el.allEls.append(el.toolbarEl);
+  el.allEls.append(el.videoEl)
+  el.allEls.append(el.toolbarEl)
+  el.videoWrapperEl.appendChild(el.allEls);
 
-  function toolbarFadeOutAndHide () {
-    toolbarEl.classList.add('fadeOut');
-    toolbarEl.onanimationend = function () {
-      toolbarEl.classList.remove('show');
-      toolbarEl.classList.remove('fadeOut');
-      toolbarEl.onanimationend = null;
-    }
-  }
-
-  function delayHideToolbar () {
-    toolBarTimer = setTimeout(() => {
-      toolbarFadeOutAndHide();
-    }, 2000)
-  }
-  // 绑定全屏事件
-  videoWrapperEl.addEventListener('dblclick', function () {
-    clearTimeout(clickTimer);
-    fullScreen(videoWrapperEl);
-  });
-
-  // 绑定 点击暂停/播放事件
-  videoWrapperEl.addEventListener('click', function (e) {
-    if (isMouseMoving) return false;
-    e.stopPropagation();
-    clearTimeout(clickTimer);
-    clickTimer = setTimeout(() => {
-      const paused = videoEl.paused;
-      if (paused) setVideoPlay()
-      else setVideoPause();
-    }, 300);
-  });
-
-  // 鼠标移入 移出
-  videoWrapperEl.addEventListener('mouseenter', function () {
-    toolbarEl.classList.add('show');
-    delayHideToolbar()
-  });
-
-  videoWrapperEl.addEventListener('mouseleave', function () {
-    toolbarFadeOutAndHide();
-    clearTimeout(toolBarTimer);
-  })
-
-  // 鼠标移动
-  videoWrapperEl.addEventListener('mousemove', function () {
-    // 鼠标一动 就开始重新计时
-    clearTimeout(toolBarTimer);
-    toolbarEl.classList.add('show');
-    delayHideToolbar()
-  })
-
-  // 监听鼠标拖动bar
-  bar.onmousedown = function (e) {
-    e.stopPropagation();
-    const currentTranslateX = getComputedStyle(bar).transform;
-    isMouseMoving = true;
-    let originX = e.clientX // 鼠标相对于视窗左边的长度
-      - 10 // toolbar 左padding
-      - parseInt(currentTranslateX.split(',')[4]) // 当前的translateX
-      + 7; // bar的宽度的一半。让中心在起点
-    const x = e.clientX;
-    const position = x - playerClientLeft - 10 - 12;
-    setBarPosition(bar, position);
-    // 滑块可以移动的范围
-    const range = {
-      min: -7,
-      max: maxRange
-    }
-    document.onmousemove = function (mouseEvent) {
-      let newLeft = mouseEvent.clientX - originX;
-      // 边界处理
-      if (newLeft < range.min) newLeft = range.min;
-      if (newLeft > range.max) newLeft = range.max;
-      requestAnimationFrame(() => {
-        bar.style.transform = `translateX(${newLeft}px)`;
-        setPlayedProgress(newLeft);
-      })
-    }
-  }
-
-  progress.addEventListener('mouseenter', function () {
-    toogleBarScale(bar, false, true);
-  });
-  progress.addEventListener('mouseleave', function () {
-    toogleBarScale(bar, true, true);
-  });
-
-  document.onmouseup = function (e) {
-    document.onmousemove = null;
-    setTimeout(() => {
-      isMouseMoving = false;
-    }, 300)
-    e.stopPropagation();
-    const currentTranslateX = getComputedStyle(bar).transform;
-    const x = parseInt(currentTranslateX.split(',')[4]);
-    setBarPosition(bar, x, videoEl, maxRange, videoTime);
-    if (!checkIn(progress)) {
-      toogleBarScale(bar, true);
-    } 
-  }
-
-  allEls.append(videoEl)
-  allEls.append(toolbarEl)
-
-  videoWrapperEl.appendChild(allEls);
-  videoEl.src = config.url;
-  videoEl.onloadeddata = function (e) {
-    const allTime = formatTime(videoEl.duration * 1000);
+  
+  el.videoEl.src = config.url;
+  el.videoEl.onloadeddata = function (e) {
+    const allTime = formatTime(el.videoEl.duration * 1000);
     // 插入总时间
-    duration = allTime;
-    setTime();
+    toolConst.duration = allTime;
+    setTime(el, toolConst);
 
     // 得到播放器容器的宽度
     initPlayerWrapperWidth()
-    maxRange = playerWidth - 20 - 21;
-    videoTime = videoEl.duration;
+    toolConst.maxRange = toolConst.playerWidth - 20 - 21;
+    toolConst.videoTime = el.videoEl.duration;
 
-    setBarPosition(bar, -7);
-    toogleBarScale(bar, true);
+    setBarPosition(el.bar, -7);
+    toogleBarScale(el.bar, true);
+
+    bindBaseEvents(el, toolConst);
+    bindToolbarEvents(el, toolConst);
   }
 
-  videoEl.addEventListener('timeupdate', function (e: any) {
-    const currentTime = videoEl.currentTime;
-    const x = maxRange * (currentTime / videoTime);
-    if (!isMouseMoving) {
-      setBarPosition(bar, x);
-      setPlayedProgress(x);
-    }
-    setTime();
-  })
-
-  videoEl.addEventListener('progress', function (e: any) {
+  el.videoEl.addEventListener('progress', function (e: any) {
     // 记载出缓存的时间
     try {
       const bufferTime = e.currentTarget.buffered.end(0)
-      const right = (bufferTime / videoTime) * maxRange;
-      console.log(maxRange - right);
-      progresBuffer.style.right = (maxRange - right) + 'px';
+      const right = (bufferTime / toolConst.videoTime) * toolConst.maxRange;
+      console.log(toolConst.maxRange - right);
+      el.progresBuffer.style.right = (toolConst.maxRange - right) + 'px';
     } catch {
-      progresBuffer.style.right = maxRange + 'px';
+      el.progresBuffer.style.right = toolConst.maxRange + 'px';
     }
   });
 
   function initPlayerWrapperWidth () {
-    const pWidth = videoWrapperEl.clientWidth;
-    playerWidth = pWidth;
-    playerClientLeft = videoWrapperEl.getBoundingClientRect().left;
+    const pWidth = el.videoWrapperEl.clientWidth;
+    toolConst.playerWidth = pWidth;
+    toolConst.playerClientLeft = el.videoWrapperEl.getBoundingClientRect().left;
   }
 
   window.onresize = function () {
     initPlayerWrapperWidth();
   }
-  el.appendChild(videoWrapperEl);
+  container.appendChild(el.videoWrapperEl);
 
 
-  function setPlayedProgress (x: number) {
-    const right = maxRange - x;
-    progresPlayed.style.right = right + 'px';
-  }
   return {
-    videoEl
+    videoEl: el.videoEl
   }
 }
 
