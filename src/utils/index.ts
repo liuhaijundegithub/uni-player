@@ -1,9 +1,12 @@
-import { UniPlayerConfig } from '../../types/UniPlayer';
+import { UniPlayerConfig, Speed } from '../../types/UniPlayer';
 import {
   play,
   pause,
-  paused
+  paused,
+  fullScreenEnter,
+  fullScreenExit
 } from '../icons/index';
+
 
 export const string2HtmlNode = (htmlString: string) => {
   const el = document.createElement('div');
@@ -93,5 +96,35 @@ export const generateBar = () => {
 
 export const generateTimeTip = () => {
   const string = '<div class="time-tip"></div>'
+  return string2HtmlNode(string);
+}
+
+export const generateFullScreenEnterIcon = () => {
+  const string = `<span class="full-enter iconfont" style="margin-right: 2px;" title="全屏">
+    <img src="${fullScreenEnter}" />
+  </span>`;
+  return string2HtmlNode(string);
+};
+
+export const generateFullScreenExitIcon = () => {
+  const string = `<span class="full-exit iconfont hide" style="margin-right: 2px;" title="取消全屏">
+    <img src="${fullScreenExit}" />
+  </span>`;
+  return string2HtmlNode(string);
+};
+
+export const generateSpeedPlay = (speed: Speed[]) => {
+  const html = speed.map(i => {
+    return `<div class="speed-item ${i.value === 1 ? 'active' : ''}" data-value="${i.value}">${i.label}</div>`
+  }).join('');
+  const string = `<span class="iconfont uni-player-speed">
+    <span class="text">倍速</span>
+    <div class="uni-player-popover">
+      <div class="uni-player-content">
+        ${html}
+      </div>
+      <div class="uni-player-empty"></div>
+    <div>
+  </span>`
   return string2HtmlNode(string);
 }

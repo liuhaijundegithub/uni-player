@@ -16,7 +16,7 @@
 }
 
 .uni-player-wrapper .hide {
-  display: none;
+  display: none!important;
 }
 
 .uni-player-wrapper {
@@ -90,6 +90,103 @@
   display: flex;
   align-items: center;
 }
+.uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-right {
+  display: flex;
+  align-items: center;
+}
+.uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-right img {
+  display: flex;
+  align-items: center;
+  width: 22px;
+  height: 22px;
+}
+.uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-right .uni-player-speed {
+  width: 43px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color:hsla(0,0%,100%,.8);
+  font-weight: bolder;
+  font-size: 14px;
+  transition: .2s ease-in-out;
+  position: relative;
+  top: -2px;
+}
+.uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-right .uni-player-speed:hover {
+  .uni-player-popover {
+    display: block;
+  }
+  .text {
+    color: #fff;
+  }
+}
+
+.uni-player-wrapper .uni-player-popover {
+  position: absolute;
+  padding: 5px;
+  background: transparent;
+  display: none;
+  z-index: 60;
+}
+.uni-player-wrapper .uni-player-popover:hover {
+  display: block;
+}
+.uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-right .uni-player-speed .uni-player-popover {
+  width: 50px;
+  left: -18px;
+  top: -211px;
+}
+
+.uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-right .uni-player-speed .uni-player-popover .uni-player-content {
+  height: 180px;
+  background: red;
+  width: 100%;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, .8);
+  overflow: hidden;
+}
+.uni-player-wrapper
+.uni-player-toolbar
+.uni-player-toolbar-right
+.uni-player-speed
+.uni-player-popover
+.uni-player-content
+.speed-item {
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: normal;
+}
+.uni-player-wrapper
+.uni-player-toolbar
+.uni-player-toolbar-right
+.uni-player-speed
+.uni-player-popover
+.uni-player-content
+.speed-item.active {
+  color: rgb(74, 151, 252);
+}
+
+.uni-player-wrapper
+.uni-player-toolbar
+.uni-player-toolbar-right
+.uni-player-speed
+.uni-player-popover
+.uni-player-content
+.speed-item:hover {
+  background: rgba(208, 208, 208, 0.5);
+}
+.uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-right .uni-player-speed .uni-player-popover .uni-player-empty {
+  background: transparent;
+  width: 100%;
+  height: 30px;
+}
+
+.uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-right .speed .text:hover {
+  color: #fff;
+}
 .uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-left .time {
   color: hsla(0,0%,100%,.8);
   font-size: 14px;
@@ -140,7 +237,7 @@
 }
 .uni-player-wrapper .uni-player-toolbar .progress .progress-played {
   height: 2px;
-  background: rgb(120, 178, 255);;
+  background: rgb(120, 178, 255);
   border-radius: 2px;
   cursor: pointer;
   position: absolute;

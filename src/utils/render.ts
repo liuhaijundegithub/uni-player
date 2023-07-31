@@ -14,7 +14,10 @@ import {
   generateVideoEl,
   generateToolbar,
   generateVideoWrapperEl,
-  generateTimeTip
+  generateTimeTip,
+  generateFullScreenEnterIcon,
+  generateFullScreenExitIcon,
+  generateSpeedPlay
 } from './index';
 import { formatTime } from './utils'
 
@@ -24,6 +27,8 @@ import bindBaseEvents from '../events/base';
 import bindToolbarEvents, { toogleBarScale } from '../events/toolbar';
 
 import { setTime, setBarPosition } from './videoBehavior'
+
+import { speed } from '../lib/config';
 
 
 
@@ -38,7 +43,8 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     maxRange: 0, // 可以滑动的最大宽度
     videoTime: 0,
     clickTimer: -1,
-    toolBarTimer: -1
+    toolBarTimer: -1,
+    speed: 1
   };
   container.classList.add('uni-player');
 
@@ -58,7 +64,10 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     playBtn: generatePlayBtn(),
     bar: generateBar(),
     timeEl: generateTime(), // 播放时间
-    timeTip: generateTimeTip()
+    timeTip: generateTimeTip(),
+    fullScreenEntry: generateFullScreenEnterIcon(),
+    fullScreenExit: generateFullScreenExitIcon(),
+    speedPlay: generateSpeedPlay(speed)
   };
 
   el.videoEl.controls = false; // 关闭默认播放器控件
@@ -74,6 +83,10 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
   el.toolbarElLeft.appendChild(el.playBtn);
   el.toolbarElLeft.appendChild(el.pauseBtn);
   el.toolbarElLeft.appendChild(el.timeEl);
+
+  el.toolbarElRight.appendChild(el.speedPlay);
+  el.toolbarElRight.appendChild(el.fullScreenEntry);
+  el.toolbarElRight.appendChild(el.fullScreenExit);
 
 
   el.allEls.append(el.toolbarEl);

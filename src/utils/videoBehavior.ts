@@ -9,7 +9,7 @@ export function setVideoPause (el: HTMLVideoElement) {
   el.pause();
 }
 
-export const fullScreen = (el: HTMLElement) => {
+export const fullScreen = (el: HTMLElement, els: El) => {
   if (elIsFullScreen()) {
     document.exitFullscreen();
   } else {
