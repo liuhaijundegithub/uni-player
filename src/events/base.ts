@@ -57,9 +57,7 @@ export default function (el: El, toolConst: ToolConst) {
     el.toolbarEl.classList.add('show');
     delayHideToolbar(el, toolConst)
   })
-  
 
-  
   el.videoEl.onplay = () => {
     el.playBtn.classList.add('hide');
     el.pauseBtn.classList.remove('hide');

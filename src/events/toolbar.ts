@@ -6,6 +6,8 @@ import {
 
 import { checkIfPointerInside, formatTime } from '../utils/utils';
 
+import { throttle } from '../utils/utils';
+
 export const toogleBarScale = (bar: HTMLElement, hide: boolean, transtion = false) => {
   let transforms = bar.style.transform.split(' ');
   transforms = transforms.filter(i => i !== `scale(${hide ? 1 : 0})` && Boolean(i));
@@ -59,9 +61,11 @@ export default function (el: El, toolConst: ToolConst) {
 
   el.progress.addEventListener('mouseenter', function () {
     toogleBarScale(el.bar, false, true);
+    el.timeTip.style.display = 'block';
   });
   el.progress.addEventListener('mouseleave', function () {
     toogleBarScale(el.bar, true, true);
+    el.timeTip.style.display = 'none';
   });
 
   document.onmouseup = function (e) {
@@ -80,13 +84,15 @@ export default function (el: El, toolConst: ToolConst) {
 
 
   // 鼠标悬浮进度条显示 时间
-  el.progress.addEventListener('mousemove', function (e) {
+  el.progress.addEventListener('mousemove', (e) => requestAnimationFrame(() => {
     e.stopPropagation();
     const x = e.clientX;
     const position = x - toolConst.playerClientLeft - 10 - 12;
     const pointerTime = toolConst.videoTime * (position / toolConst.maxRange);
     const currentTime = formatTime(pointerTime * 1000);
     const text = currentTime.padStart(toolConst.duration.length, '00:')
-    console.log(text);
-  })
+    el.timeTip.innerText = text;
+    const width = el.timeTip.clientWidth / 2;
+    el.timeTip.style.transform = `translateX(${position - width + 7}px)`;
+  }))
 }

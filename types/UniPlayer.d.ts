@@ -25,6 +25,7 @@ export interface El {
   pauseBtn: HTMLElement;
   playBtn: HTMLElement;
   bar: HTMLElement;
+  timeTip: HTMLElement;
 }
 
 export interface ToolConst {

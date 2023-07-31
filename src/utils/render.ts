@@ -13,7 +13,8 @@ import {
   generateBufferProgress,
   generateVideoEl,
   generateToolbar,
-  generateVideoWrapperEl
+  generateVideoWrapperEl,
+  generateTimeTip
 } from './index';
 import { formatTime } from './utils'
 
@@ -56,7 +57,8 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     pauseBtn: generatePauseBtn(),
     playBtn: generatePlayBtn(),
     bar: generateBar(),
-    timeEl: generateTime() // 播放时间
+    timeEl: generateTime(), // 播放时间
+    timeTip: generateTimeTip()
   };
 
   el.videoEl.controls = false; // 关闭默认播放器控件
@@ -65,6 +67,7 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
   el.progress.appendChild(el.progresPlayed);
   el.progress.appendChild(el.progresBuffer);
   el.progress.appendChild(el.bar);
+  el.progress.appendChild(el.timeTip);
   el.toolbarEl.appendChild(el.toolbarElLeft);
   el.toolbarEl.appendChild(el.toolbarElRight);
   el.toolbarEl.appendChild(el.progress);
@@ -78,7 +81,7 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
   el.allEls.append(el.toolbarEl)
   el.videoWrapperEl.appendChild(el.allEls);
 
-  
+
   el.videoEl.src = config.url;
   el.videoEl.onloadeddata = function (e) {
     const allTime = formatTime(el.videoEl.duration * 1000);

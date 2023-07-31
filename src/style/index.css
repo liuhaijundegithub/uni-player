@@ -166,7 +166,6 @@
   background: #fff;
   position: absolute;
   top: 2px;
-  transform: scale(0);
   z-index: 50;
 }
 
@@ -194,4 +193,14 @@
   position: absolute;
   top: 2px;
   right: 3px;
+}
+
+.uni-player-wrapper .uni-player-toolbar .progress .time-tip {
+  background: rgba(0, 0, 0, .9);
+  position: absolute;
+  bottom: 15px;
+  padding: 1px 2px;
+  color: #fff;
+  font-size: 10px;
+  border-radius: 2px;
 }

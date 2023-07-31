@@ -46,7 +46,7 @@ export const formatTime = (millisecond: number) => {
     let s = '';
     if (days > 0) s += ('0' + days).slice(-2) + ':';
     if (hours > 0) s += ('0' + hours).slice(-2) + ':';
-    if (minutes > 0) s += ('0' + minutes).slice(-2) + ':';
-    if (seconds > 0) s += ('0' + seconds.toFixed(0)).slice(-2);
+    s += ('0' + minutes).slice(-2) + ':';
+    s += ('0' + seconds.toFixed(0)).slice(-2);
     return s;
 };

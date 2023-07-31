@@ -81,7 +81,6 @@ export const generateProgress = () => {
 }
 
 // 生成全部的进度条
-
 export const generateFullProgress = () => {
   const string = '<div class="progress-full"></div>';
   return string2HtmlNode(string);
@@ -89,5 +88,10 @@ export const generateFullProgress = () => {
 
 export const generateBar = () => {
   const string = '<div class="progress-bar"></div>';
+  return string2HtmlNode(string);
+}
+
+export const generateTimeTip = () => {
+  const string = '<div class="time-tip"></div>'
   return string2HtmlNode(string);
 }
