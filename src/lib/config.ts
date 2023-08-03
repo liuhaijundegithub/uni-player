@@ -1,5 +1,6 @@
 export const speed = [
   { label: '2.0x', value: 2 },
+  { label: '1.75x', value: 1.75 },
   { label: '1.5x', value: 1.5 },
   { label: '1.25x',value: 1.25 },
   { label: '1.0x', value: 1 },

@@ -168,11 +168,11 @@
 .uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-right .uni-player-speed .uni-player-popover {
   width: 50px;
   left: -4px;
-  top: -211px;
+  top: -241px;
 }
 
 .uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-right .uni-player-speed .uni-player-popover .uni-player-content {
-  height: 180px;
+  height: 210px;
   width: 100%;
   overflow: hidden;
 }
