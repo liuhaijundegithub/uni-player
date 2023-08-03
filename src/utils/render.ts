@@ -17,7 +17,10 @@ import {
   generateTimeTip,
   generateFullScreenEnterIcon,
   generateFullScreenExitIcon,
-  generateSpeedPlay
+  generateSpeedPlay,
+  generateLoading,
+  generateVoice,
+  generateBottomProgress
 } from './index';
 import { formatTime } from './utils'
 
@@ -26,7 +29,7 @@ import { El, ToolConst } from '../../types/UniPlayer';
 import bindBaseEvents from '../events/base';
 import bindToolbarEvents, { toogleBarScale } from '../events/toolbar';
 
-import { setTime, setBarPosition } from './videoBehavior'
+import { setTime, setBarPosition, initPlayerWrapperWidth } from './videoBehavior'
 
 import { speed } from '../lib/config';
 
@@ -44,7 +47,8 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     videoTime: 0,
     clickTimer: -1,
     toolBarTimer: -1,
-    speed: 1
+    speed: 1,
+    isMouseDown: false
   };
   container.classList.add('uni-player');
 
@@ -67,7 +71,10 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     timeTip: generateTimeTip(),
     fullScreenEntry: generateFullScreenEnterIcon(),
     fullScreenExit: generateFullScreenExitIcon(),
-    speedPlay: generateSpeedPlay(speed)
+    speedPlay: generateSpeedPlay(speed),
+    loadingEl: generateLoading(),
+    voice: generateVoice(),
+    bottomProgress: generateBottomProgress()
   };
 
   el.videoEl.controls = false; // 关闭默认播放器控件
@@ -85,13 +92,15 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
   el.toolbarElLeft.appendChild(el.timeEl);
 
   el.toolbarElRight.appendChild(el.speedPlay);
+  el.toolbarElRight.appendChild(el.voice);
   el.toolbarElRight.appendChild(el.fullScreenEntry);
   el.toolbarElRight.appendChild(el.fullScreenExit);
 
 
   el.allEls.append(el.toolbarEl);
+  el.allEls.append(el.bottomProgress);
   el.allEls.append(el.videoEl)
-  el.allEls.append(el.toolbarEl)
+  el.allEls.append(el.loadingEl)
   el.videoWrapperEl.appendChild(el.allEls);
 
 
@@ -103,8 +112,8 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     setTime(el, toolConst);
 
     // 得到播放器容器的宽度
-    initPlayerWrapperWidth()
-    toolConst.maxRange = toolConst.playerWidth - 20 - 21;
+    initPlayerWrapperWidth(el, toolConst)
+
     toolConst.videoTime = el.videoEl.duration;
 
     setBarPosition(el.bar, -7);
@@ -114,26 +123,9 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     bindToolbarEvents(el, toolConst);
   }
 
-  el.videoEl.addEventListener('progress', function (e: any) {
-    // 记载出缓存的时间
-    try {
-      const bufferTime = e.currentTarget.buffered.end(0)
-      const right = (bufferTime / toolConst.videoTime) * toolConst.maxRange;
-      console.log(toolConst.maxRange - right);
-      el.progresBuffer.style.right = (toolConst.maxRange - right) + 'px';
-    } catch {
-      el.progresBuffer.style.right = toolConst.maxRange + 'px';
-    }
-  });
-
-  function initPlayerWrapperWidth () {
-    const pWidth = el.videoWrapperEl.clientWidth;
-    toolConst.playerWidth = pWidth;
-    toolConst.playerClientLeft = el.videoWrapperEl.getBoundingClientRect().left;
-  }
 
   window.onresize = function () {
-    initPlayerWrapperWidth();
+    initPlayerWrapperWidth(el , toolConst);
   }
   container.appendChild(el.videoWrapperEl);
 

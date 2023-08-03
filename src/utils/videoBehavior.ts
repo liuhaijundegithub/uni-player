@@ -9,11 +9,17 @@ export function setVideoPause (el: HTMLVideoElement) {
   el.pause();
 }
 
-export const fullScreen = (el: HTMLElement, els: El) => {
+export function initPlayerWrapperWidth (el: El, toolConst: ToolConst) {
+  const pWidth = el.videoWrapperEl.clientWidth;
+  toolConst.playerWidth = pWidth;
+  toolConst.playerClientLeft = el.videoWrapperEl.getBoundingClientRect().left;
+  toolConst.maxRange = toolConst.playerWidth - 20 - 21;
+}
+export const fullScreen = (dom: HTMLElement, el: El, toolConst: ToolConst) => {
   if (elIsFullScreen()) {
     document.exitFullscreen();
   } else {
-    el.requestFullscreen();
+    dom.requestFullscreen();
   }
 }
 
@@ -43,6 +49,10 @@ export function delayHideToolbar (el: El, toolConst: ToolConst) {
 export function setPlayedProgress (el:El, toolConst: ToolConst, x: number) {
   const right = toolConst.maxRange - x;
   el.progresPlayed.style.right = right + 'px';
+}
+export function setBottomProgress (el:El, toolConst: ToolConst, x: number) {
+  const right = toolConst.playerWidth - x;
+  el.bottomProgress.style.right = right + 'px';
 }
 
 export const setBarPosition = (

@@ -4,9 +4,11 @@ import {
   pause,
   paused,
   fullScreenEnter,
-  fullScreenExit
+  fullScreenExit,
+  loading,
+  volume,
+  mute
 } from '../icons/index';
-
 
 export const string2HtmlNode = (htmlString: string) => {
   const el = document.createElement('div');
@@ -44,13 +46,13 @@ export const generateToolbarRightWrapper = () => {
 }
 
 export const generatePlayBtn = () => {
-  const string = `<div class="play iconfont">
+  const string = `<div class="play uni-logo">
     <img src="${play}" />
   </div>`;
   return string2HtmlNode(string);
 }
 export const generatePauseBtn = () => {
-  const string = `<div class="pause hide iconfont">
+  const string = `<div class="pause hide uni-logo">
     <img src="${pause}" />
   </div>`;
   return string2HtmlNode(string);
@@ -100,24 +102,34 @@ export const generateTimeTip = () => {
 }
 
 export const generateFullScreenEnterIcon = () => {
-  const string = `<span class="full-enter iconfont" style="margin-right: 2px;" title="全屏">
+  const string = `<span class="full-enter uni-logo" style="margin-right: 2px;" title="全屏">
     <img src="${fullScreenEnter}" />
   </span>`;
   return string2HtmlNode(string);
 };
 
 export const generateFullScreenExitIcon = () => {
-  const string = `<span class="full-exit iconfont hide" style="margin-right: 2px;" title="取消全屏">
+  const string = `<span class="full-exit uni-logo hide" style="margin-right: 2px;" title="取消全屏">
     <img src="${fullScreenExit}" />
   </span>`;
   return string2HtmlNode(string);
 };
 
+export const generateLoading = () => {
+  const string = `<div class="uni-player-loading hide">
+    <div class="uni-player-loading-logo">
+      <img src=${loading} />
+    </div>
+    <div class="uni-player-loading-text">加载中···</div>
+  </div>`;
+  return string2HtmlNode(string);
+}
+
 export const generateSpeedPlay = (speed: Speed[]) => {
   const html = speed.map(i => {
     return `<div class="speed-item ${i.value === 1 ? 'active' : ''}" data-value="${i.value}">${i.label}</div>`
   }).join('');
-  const string = `<span class="iconfont uni-player-speed">
+  const string = `<span class="uni-logo uni-player-speed">
     <span class="text">倍速</span>
     <div class="uni-player-popover">
       <div class="uni-player-content">
@@ -126,5 +138,28 @@ export const generateSpeedPlay = (speed: Speed[]) => {
       <div class="uni-player-empty"></div>
     <div>
   </span>`
+  return string2HtmlNode(string);
+}
+
+export const generateBottomProgress = () => {
+  const string = '<div class="uni-bottom-progress"></div>';
+  return string2HtmlNode(string);
+};
+
+export const generateVoice = () => {
+  const string = `<span class="uni-logo uni-voice">
+    <img src=${volume} class="volume" />
+    <img src=${mute} class="hide mute" />
+    <div class="uni-player-popover">
+      <div class="uni-player-content">
+        <div class="volume-value">100</div>
+        <div class="volume-bar-progress">
+          <div class="bar"></div>
+          <div class="volume-bar-progress-active"></div>
+        </div>
+      </div>
+      <div class="uni-player-empty"></div>
+    <div>
+  </span>`;
   return string2HtmlNode(string);
 }

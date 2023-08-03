@@ -7,7 +7,9 @@ import {
   toolbarFadeOutAndHide,
   setTime,
   setPlayedProgress,
-  setBarPosition
+  setBarPosition,
+  initPlayerWrapperWidth,
+  setBottomProgress
 } from '../utils/videoBehavior';
 
 export default function (el: El, toolConst: ToolConst) {
@@ -24,7 +26,7 @@ export default function (el: El, toolConst: ToolConst) {
   // 绑定全屏事件
   el.videoWrapperEl.addEventListener('dblclick', function () {
     clearTimeout(toolConst.clickTimer);
-    fullScreen(el.videoWrapperEl, el);
+    fullScreen(el.videoWrapperEl, el, toolConst);
   });
 
   // 绑定 点击暂停/播放事件
@@ -41,12 +43,12 @@ export default function (el: El, toolConst: ToolConst) {
 
   // 鼠标移入 移出
   el.videoWrapperEl.addEventListener('mouseenter', function () {
-    el.toolbarEl.classList.add('show');
+    showToolbar()
     delayHideToolbar(el, toolConst)
   });
 
   el.videoWrapperEl.addEventListener('mouseleave', function () {
-    toolbarFadeOutAndHide(el, toolConst);
+    hideToolbar();
     clearTimeout(toolConst.toolBarTimer);
   })
 
@@ -54,7 +56,7 @@ export default function (el: El, toolConst: ToolConst) {
   el.videoWrapperEl.addEventListener('mousemove', function () {
     // 鼠标一动 就开始重新计时
     clearTimeout(toolConst.toolBarTimer);
-    el.toolbarEl.classList.add('show');
+    showToolbar()
     delayHideToolbar(el, toolConst)
   })
 
@@ -70,23 +72,17 @@ export default function (el: El, toolConst: ToolConst) {
   }
 
   el.videoEl.addEventListener('timeupdate', function (e: any) {
-    const currentTime = el.videoEl.currentTime;
-    const x = toolConst.maxRange * (currentTime / toolConst.videoTime);
-    if (!toolConst.isMouseMoving) {
-      setBarPosition(el.bar, x);
-      setPlayedProgress(el, toolConst, x);
-    }
-    setTime(el, toolConst);
+    !toolConst.isMouseDown && timeupdate();
   })
 
   // 点击右下角全屏
   el.fullScreenEntry.addEventListener('click', function () {
-    fullScreen(el.videoWrapperEl, el);
+    fullScreen(el.videoWrapperEl, el, toolConst);
   })
 
   // 点击右下角取消全屏
   el.fullScreenExit.addEventListener('click', function () {
-    fullScreen(el.videoWrapperEl, el);
+    fullScreen(el.videoWrapperEl, el, toolConst);
   });
 
   // 倍速播放
@@ -125,6 +121,67 @@ export default function (el: El, toolConst: ToolConst) {
       el.fullScreenExit.classList.add('hide');
       el.fullScreenEntry.classList.remove('hide');
     }
+    initPlayerWrapperWidth(el, toolConst);
+    timeupdate();
+    bufferUpdate();
   })
 
+  el.videoEl.addEventListener('waiting', function () {
+    el.loadingEl.classList.remove('hide');
+  })
+  el.videoEl.addEventListener('canplay', function () {
+    el.loadingEl.classList.add('hide');
+  })
+
+  el.videoEl.addEventListener('progress', function (e: any) {
+    bufferUpdate();
+  });
+
+  el.videoEl.addEventListener('volumechange', function (e) {
+    const v = el.videoEl.volume;
+    const mute = document.querySelector('.uni-player-wrapper .uni-voice .mute') as HTMLElement;
+    const volume = document.querySelector('.uni-player-wrapper .uni-voice .volume') as HTMLElement;
+    if (v === 0) {
+      volume.classList.add('hide');
+      mute.classList.remove('hide');
+    } else {
+      volume.classList.remove('hide');
+      mute.classList.add('hide');
+    }
+  });
+
+  function timeupdate () {
+    const currentTime = el.videoEl.currentTime;
+      const x = toolConst.maxRange * (currentTime / toolConst.videoTime);
+      const x_bottom = toolConst.playerWidth * (currentTime / toolConst.videoTime);
+      if (!toolConst.isMouseMoving) {
+        setBarPosition(el.bar, x);
+        setPlayedProgress(el, toolConst, x);
+        setBottomProgress(el, toolConst, x_bottom);
+      }
+      setTime(el, toolConst);
+  }
+
+  function bufferUpdate () {
+    // 记载出缓存的时间
+    try {
+      const bufferTime = el.videoEl.buffered.end(0)
+      const right = (bufferTime / toolConst.videoTime) * toolConst.maxRange;
+      el.progresBuffer.style.right = (toolConst.maxRange - right) + 'px';
+    } catch {
+      el.progresBuffer.style.right = toolConst.maxRange + 'px';
+    }
+  }
+
+  // 显示toolbar
+  function showToolbar () {
+    el.toolbarEl.classList.add('show');
+    el.bottomProgress.classList.add('hide');
+  }
+
+  // 隐藏toolbar
+  function hideToolbar () {
+    toolbarFadeOutAndHide(el, toolConst);
+    el.bottomProgress.classList.remove('hide');
+  }
 }

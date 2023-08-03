@@ -29,6 +29,9 @@ export interface El {
   fullScreenEntry: HTMLElement;
   fullScreenExit: HTMLElement;
   speedPlay: HTMLElement;
+  loadingEl: HTMLElement;
+  voice: HTMLElement;
+  bottomProgress: HTMLElement;
 }
 
 export interface ToolConst {
@@ -41,6 +44,7 @@ export interface ToolConst {
   clickTimer: number;
   toolBarTimer: number;
   speed: number;
+  isMouseDown: boolean;
 }
 
 export type Speed = { label: string; value: string | number };
