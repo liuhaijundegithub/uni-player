@@ -48,7 +48,8 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     clickTimer: -1,
     toolBarTimer: -1,
     speed: 1,
-    isMouseDown: false
+    isMouseDown: false,
+    loadingTimer: -1
   };
   container.classList.add('uni-player');
 

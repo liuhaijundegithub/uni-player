@@ -33,9 +33,11 @@ export function setTime (el: El, toolConst: ToolConst) {
 export function toolbarFadeOutAndHide (el: El, toolConst: ToolConst) {
   el.toolbarEl.classList.add('fadeOut');
   el.toolbarEl.onanimationend = function () {
-    el.toolbarEl.classList.remove('show');
     el.toolbarEl.classList.remove('fadeOut');
-    el.toolbarEl.onanimationend = null;
+    el.toolbarEl.classList.remove('show');
+    setTimeout(() => {
+      el.toolbarEl.onanimationend = null;
+    }, 200)
   }
 }
 

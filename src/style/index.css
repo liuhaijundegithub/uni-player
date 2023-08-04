@@ -41,7 +41,7 @@
 
 .uni-player-wrapper .uni-player-toolbar {
   height: 55px;
-  /* background:red; */
+  /* background:rgba(0, 0, 0, .5); */
   background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, .5));
   position: absolute;
   left: 0;
@@ -81,7 +81,6 @@
   cursor: pointer;
   height: 25px;
   width: 25px;
-  filter: brightness(.9);
   display: block;
 }
 .uni-logo:hover {
@@ -129,7 +128,7 @@
   height: 100%;
   display: flex;
   align-items: center;
-  color:hsla(0,0%,100%,.8);
+  color: #fff;
   font-weight: bolder;
   font-size: 14px;
   transition: .2s ease-in-out;
@@ -214,7 +213,7 @@
   color: #fff;
 }
 .uni-player-wrapper .uni-player-toolbar .uni-player-toolbar-left .time {
-  color: hsla(0,0%,100%,.8);
+  color: #fff;
   font-size: 14px;
   height: 23px;
   margin-left: 10px;

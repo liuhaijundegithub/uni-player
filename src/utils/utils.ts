@@ -38,9 +38,9 @@ export const checkIfPointerInside = (obj: HTMLElement) => {
 
 export const formatTime = (millisecond: number) => {
     if (millisecond === undefined) return '-';
-    const days = parseInt(String(millisecond / (1000 * 60 * 60 * 24)));
-    const hours = parseInt(String((millisecond % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)));
-    const minutes = parseInt(String((millisecond % (1000 * 60 * 60)) / (1000 * 60)));
+    const days = parseInt((millisecond / (1000 * 60 * 60 * 24)).toFixed(0));
+    const hours = parseInt(((millisecond % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toFixed(0));
+    const minutes = parseInt(((millisecond % (1000 * 60 * 60)) / (1000 * 60)).toFixed(0));
     const seconds = (millisecond % (1000 * 60)) / 1000;
 
     let s = '';

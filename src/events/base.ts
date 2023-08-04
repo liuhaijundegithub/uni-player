@@ -127,10 +127,13 @@ export default function (el: El, toolConst: ToolConst) {
   })
 
   el.videoEl.addEventListener('waiting', function () {
-    el.loadingEl.classList.remove('hide');
+    toolConst.loadingTimer = setTimeout(() => {
+      el.loadingEl.classList.remove('hide');
+    }, 1000);
   })
   el.videoEl.addEventListener('canplay', function () {
     el.loadingEl.classList.add('hide');
+    clearTimeout(toolConst.loadingTimer);
   })
 
   el.videoEl.addEventListener('progress', function (e: any) {

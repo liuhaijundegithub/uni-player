@@ -45,6 +45,7 @@ export interface ToolConst {
   toolBarTimer: number;
   speed: number;
   isMouseDown: boolean;
+  loadingTimer: number;
 }
 
 export type Speed = { label: string; value: string | number };
