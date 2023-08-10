@@ -25,7 +25,7 @@ export const fullScreen = (dom: HTMLElement, el: El, toolConst: ToolConst) => {
 
 
 export function setTime (el: El, toolConst: ToolConst) {
-  const currentTime = formatTime(el.videoEl.currentTime * 1000);
+  const currentTime = formatTime(el.videoEl.currentTime);
   const html = currentTime.padStart(toolConst.duration.length, '00:') + '<span class="dash">/</span>' + toolConst.duration;
   el.timeEl.innerHTML = html;
 }
@@ -44,6 +44,7 @@ export function toolbarFadeOutAndHide (el: El, toolConst: ToolConst) {
 export function delayHideToolbar (el: El, toolConst: ToolConst) {
   toolConst.toolBarTimer = setTimeout(() => {
     toolbarFadeOutAndHide(el, toolConst);
+    el.bottomProgress.classList.remove('hide');
   }, 2000)
 }
 

@@ -1,4 +1,4 @@
-import { El, ToolConst } from '../../types/UniPlayer';
+import { El, ToolConst, UniPlayerConfig } from '../../types/UniPlayer';
 import {
   setVideoPause,
   setVideoPlay,
@@ -12,7 +12,7 @@ import {
   setBottomProgress
 } from '../utils/videoBehavior';
 
-export default function (el: El, toolConst: ToolConst) {
+export default function bindBaseEvents (el: El, toolConst: ToolConst, config: UniPlayerConfig) {
   el.playBtn.addEventListener('click', function (e) {
     e.stopPropagation();
     el.videoEl.play();
@@ -125,15 +125,15 @@ export default function (el: El, toolConst: ToolConst) {
     timeupdate();
     bufferUpdate();
   })
-
   el.videoEl.addEventListener('waiting', function () {
     toolConst.loadingTimer = setTimeout(() => {
       el.loadingEl.classList.remove('hide');
     }, 1000);
+    // el.loadingEl.classList.remove('hide');
   })
-  el.videoEl.addEventListener('canplay', function () {
-    el.loadingEl.classList.add('hide');
+  el.videoEl.addEventListener('canplaythrough', function () {
     clearTimeout(toolConst.loadingTimer);
+    el.loadingEl.classList.add('hide');
   })
 
   el.videoEl.addEventListener('progress', function (e: any) {

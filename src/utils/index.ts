@@ -1,4 +1,4 @@
-import { UniPlayerConfig, Speed } from '../../types/UniPlayer';
+import { UniPlayerConfig, Speed, Sources } from '../../types/UniPlayer';
 import {
   play,
   pause,
@@ -161,5 +161,27 @@ export const generateVoice = () => {
       <div class="uni-player-empty"></div>
     <div>
   </span>`;
+  return string2HtmlNode(string);
+}
+
+export const generateVideoSources = (sources: Sources[]) => {
+  let activeIndex = sources.findIndex(i => i.active);
+  if (activeIndex < 0) activeIndex = 0;
+  const currentTag = sources[activeIndex].tag;
+
+  const baseTop = 31;
+  const finalTop = sources.length * 30 + baseTop;
+  const html = sources.map((i, index) => {
+    return `<div class="source-item ${index === activeIndex ? 'active' : ''}">${i.tag}</div>`
+  }).join('');
+  const string = `<span class="uni-logo uni-player-sources">
+    <span class="text">${currentTag}</span>
+    <div class="uni-player-popover" style="top: ${-finalTop}px">
+      <div class="uni-player-content">
+        ${html}
+      </div>
+      <div class="uni-player-empty"></div>
+    <div>
+  </span>`
   return string2HtmlNode(string);
 }

@@ -1,9 +1,15 @@
 declare module 'UniPlayer';
 
+interface Sources {
+  source: string;
+  tag: string;
+  active?: boolean; // 默认播放的清晰度流
+}
 export interface UniPlayerConfig {
   container: string | HTMLElement;
-  url: string;
+  url: string | Sources[];
   autoPlay?: boolean;
+  startTime?: number; // 开始播放的时间
 }
 
 export interface UniPlayerStatus extends UniPlayerConfig {
@@ -32,6 +38,7 @@ export interface El {
   loadingEl: HTMLElement;
   voice: HTMLElement;
   bottomProgress: HTMLElement;
+  videoSources?: HTMLElement;
 }
 
 export interface ToolConst {
@@ -41,11 +48,12 @@ export interface ToolConst {
   playerClientLeft: number;
   maxRange: number;
   videoTime: number;
-  clickTimer: number;
-  toolBarTimer: number;
+  clickTimer: NodeJS.Timer | number;
+  toolBarTimer: NodeJS.Timer | number;
   speed: number;
   isMouseDown: boolean;
-  loadingTimer: number;
+  loadingTimer: NodeJS.Timer | number;
+  eventBinded: boolean;
 }
 
 export type Speed = { label: string; value: string | number };

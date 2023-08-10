@@ -1,10 +1,12 @@
-import { El, ToolConst } from '../../types/UniPlayer';
+import { El, ToolConst, UniPlayerConfig, Sources } from '../../types/UniPlayer';
 import {
   setBarPosition,
   setPlayedProgress
 } from '../utils/videoBehavior';
 
 import { checkIfPointerInside, formatTime } from '../utils/utils';
+
+import layer from '../utils/layer';
 
 
 export const toogleBarScale = (bar: HTMLElement, hide: boolean, transtion = false) => {
@@ -14,7 +16,7 @@ export const toogleBarScale = (bar: HTMLElement, hide: boolean, transtion = fals
   bar.style.transform = transforms.join(' ');
 }
 
-export default function (el: El, toolConst: ToolConst) {
+export default function bindToolbarEvents (el: El, toolConst: ToolConst, config: UniPlayerConfig) {
 
   const volumeBar = document.querySelector('.uni-player-wrapper .volume-bar-progress .bar') as HTMLElement;
   const volumeProgressActive = document.querySelector('.uni-player-wrapper .volume-bar-progress .volume-bar-progress-active') as HTMLElement;
@@ -131,7 +133,7 @@ export default function (el: El, toolConst: ToolConst) {
     const x = e.clientX;
     const position = x - toolConst.playerClientLeft - 10 - 12;
     const pointerTime = toolConst.videoTime * (position / toolConst.maxRange);
-    const currentTime = formatTime(pointerTime * 1000);
+    const currentTime = formatTime(pointerTime);
     const text = currentTime.padStart(toolConst.duration.length, '00:')
     el.timeTip.innerText = text;
     const width = el.timeTip.clientWidth / 2;
@@ -181,4 +183,53 @@ export default function (el: El, toolConst: ToolConst) {
      volumeValue.innerText = value;
      el.videoEl.volume = parseInt(value) / 100;
   }
+
+  // 切换清晰度功能
+  el.videoSources?.addEventListener('click', function (e) {
+    const target = e.target as HTMLElement;;
+    if (target.classList.contains('source-item')) {
+      if (target.classList.contains('active')) return false;
+      const sources = config.url as Sources[];
+      const tag = target.innerText;
+      const source = sources.find(i => i.tag === tag);
+      if (source) {
+        layer.toast(`正在切换至${tag}...`);
+        // 切换清晰度
+        const isPause = el.videoEl.paused;
+        const v = document.createElement('video');
+        const currentTime = el.videoEl.currentTime;
+        v.src = source.source;
+        v.currentTime = currentTime;
+        const time = new Date().valueOf();
+        //页面的交互
+
+        const text = el.videoSources?.querySelector('.text') as HTMLElement;
+        const sourcesItem = el.videoSources?.querySelector('.source-item.active');
+        const popover = el.videoSources?.querySelector('.uni-player-popover') as HTMLElement;
+        if (popover) {
+          popover.classList.add('hide');
+          setTimeout(() => {
+            popover.classList.remove('hide');
+          }, 300);
+        }
+        sourcesItem?.classList.remove('active');
+        target.classList.add('active');
+
+        v.oncanplaythrough = function () {
+          el.videoEl.src = source.source;
+          const endTime = new Date().valueOf();
+          if (isPause) {
+            el.videoEl.currentTime = currentTime
+            el.videoEl.pause();
+          } else {
+            el.videoEl.currentTime = currentTime + (endTime - time) / 1000;
+            el.videoEl.play();
+          }
+          if (text) text.innerText = tag;
+          layer.close();
+          layer.toast(`已经切换至${tag}`, 1);
+        }
+      }
+    }
+  } )
 }

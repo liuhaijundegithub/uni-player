@@ -36,17 +36,22 @@ export const checkIfPointerInside = (obj: HTMLElement) => {
     }
 }
 
-export const formatTime = (millisecond: number) => {
-    if (millisecond === undefined) return '-';
-    const days = parseInt((millisecond / (1000 * 60 * 60 * 24)).toFixed(0));
-    const hours = parseInt(((millisecond % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toFixed(0));
-    const minutes = parseInt(((millisecond % (1000 * 60 * 60)) / (1000 * 60)).toFixed(0));
-    const seconds = (millisecond % (1000 * 60)) / 1000;
-
-    let s = '';
-    if (days > 0) s += ('0' + days).slice(-2) + ':';
-    if (hours > 0) s += ('0' + hours).slice(-2) + ':';
-    s += ('0' + minutes).slice(-2) + ':';
-    s += ('0' + seconds.toFixed(0)).slice(-2);
-    return s;
+export const formatTime = (value: number) => {
+    let secondTime = parseInt(String(value)) as any;
+    let minuteTime = 0 as any;
+    let hourTime = 0 as any;
+    if (secondTime >= 60) {
+      minuteTime = parseInt(String(secondTime / 60));
+      secondTime = parseInt(String(secondTime % 60));
+      if (minuteTime >= 60) {
+        hourTime = parseInt(String(minuteTime / 60));
+        minuteTime = parseInt(String(minuteTime % 60));
+      }
+    }
+    // 补0
+    hourTime = hourTime < 10 ? "0" + hourTime : hourTime;
+    minuteTime = minuteTime < 10 ? "0" + minuteTime : minuteTime;
+    secondTime = secondTime < 10 ? "0" + secondTime : secondTime;
+    let res = (hourTime === '00' ? '' : hourTime + ":") + minuteTime + ":" + secondTime;
+    return res;
 };

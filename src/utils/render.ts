@@ -20,7 +20,8 @@ import {
   generateSpeedPlay,
   generateLoading,
   generateVoice,
-  generateBottomProgress
+  generateBottomProgress,
+  generateVideoSources
 } from './index';
 import { formatTime } from './utils'
 
@@ -49,7 +50,8 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     toolBarTimer: -1,
     speed: 1,
     isMouseDown: false,
-    loadingTimer: -1
+    loadingTimer: -1,
+    eventBinded: false
   };
   container.classList.add('uni-player');
 
@@ -105,9 +107,23 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
   el.videoWrapperEl.appendChild(el.allEls);
 
 
-  el.videoEl.src = config.url;
+  if (typeof config.url === 'string') {
+    el.videoEl.src = config.url;
+  } else {
+    const s = config.url.find(i => i.active);
+    // 渲染视频源
+    el.videoSources = generateVideoSources(config.url);
+    el.toolbarElRight.insertBefore(el.videoSources, el.toolbarElRight.childNodes[0])
+    if (s) {
+      el.videoEl.src = s.source;
+    } else {
+      el.videoEl.src = config.url[0].source;
+    }
+  }
+  el.videoEl.autoplay = Boolean(config.autoPlay);
   el.videoEl.onloadeddata = function (e) {
-    const allTime = formatTime(el.videoEl.duration * 1000);
+    if (toolConst.eventBinded) return false;
+    const allTime = formatTime(el.videoEl.duration);
     // 插入总时间
     toolConst.duration = allTime;
     setTime(el, toolConst);
@@ -120,8 +136,16 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     setBarPosition(el.bar, -7);
     toogleBarScale(el.bar, true);
 
-    bindBaseEvents(el, toolConst);
-    bindToolbarEvents(el, toolConst);
+    bindBaseEvents(el, toolConst, config);
+    bindToolbarEvents(el, toolConst, config);
+
+
+    // 如果指定了开始播放的时间以及自动播放
+    if (config.autoPlay && config.startTime) {
+      el.videoEl.currentTime = config.startTime;
+      el.videoEl.play();
+    }
+    toolConst.eventBinded = true;
   }
 
 
