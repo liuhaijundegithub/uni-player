@@ -29,6 +29,8 @@ import { El, ToolConst } from '../../types/UniPlayer';
 
 import bindBaseEvents from '../events/base';
 import bindToolbarEvents, { toogleBarScale } from '../events/toolbar';
+import bindError from '../events/error';
+import bindShortcuts from '../events/shortcuts';
 
 import { setTime, setBarPosition, initPlayerWrapperWidth } from './videoBehavior'
 
@@ -107,6 +109,7 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
   el.videoWrapperEl.appendChild(el.allEls);
 
 
+  bindError(el, toolConst, config);
   if (typeof config.url === 'string') {
     el.videoEl.src = config.url;
   } else {
@@ -138,6 +141,7 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
 
     bindBaseEvents(el, toolConst, config);
     bindToolbarEvents(el, toolConst, config);
+    bindShortcuts(el, toolConst, config);
 
 
     // 如果指定了开始播放的时间以及自动播放
