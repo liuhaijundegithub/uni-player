@@ -111,7 +111,22 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
 
   bindError(el, toolConst, config);
   if (typeof config.url === 'string') {
-    el.videoEl.src = config.url;
+    if (config.isHls) {
+      if (config.Hls.isSupported()) {
+        const hls = new config.Hls();
+        hls.loadSource(config.url);
+        hls.attachMedia(el.videoEl);
+        hls.on(config.Hls.Events.MANIFEST_PARSED, function (event, data) {
+          console.log(
+            'manifest loaded, found ' + data.levels.length + ' quality level'
+          );
+        });
+        hls.startLevel = 1;
+      }
+    } else {
+      // 不需要hls处理
+      el.videoEl.src = config.url;
+    }
   } else {
     const s = config.url.find(i => i.active);
     // 渲染视频源
@@ -124,6 +139,9 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     }
   }
   el.videoEl.autoplay = Boolean(config.autoPlay);
+  toolConst.loadingTimer = setTimeout(() => {
+    el.loadingEl.classList.remove('hide');
+  }, 1000);
   el.videoEl.onloadeddata = function (e) {
     if (toolConst.eventBinded) return false;
     const allTime = formatTime(el.videoEl.duration);

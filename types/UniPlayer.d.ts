@@ -10,6 +10,8 @@ export interface UniPlayerConfig {
   url: string | Sources[];
   autoPlay?: boolean;
   startTime?: number; // 开始播放的时间
+  isHls?: boolean;
+  Hls?: any
 }
 
 export interface UniPlayerStatus extends UniPlayerConfig {
