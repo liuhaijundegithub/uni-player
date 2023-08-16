@@ -214,6 +214,13 @@ export default function bindToolbarEvents (el: El, toolConst: ToolConst, config:
         }
         sourcesItem?.classList.remove('active');
         target.classList.add('active');
+        if (config.isHls) {
+          const index = source.source;
+          toolConst.hls.currentLevel = index;
+          layer.toast(`已经切换至${tag}`, 1);
+          if (text) text.innerText = tag;
+          return false;
+        }
 
         v.oncanplaythrough = function () {
           el.videoEl.src = source.source;

@@ -56,6 +56,8 @@ export interface ToolConst {
   isMouseDown: boolean;
   loadingTimer: NodeJS.Timer | number;
   eventBinded: boolean;
+  hls?: any;
+  videoAddress?: string;
 }
 
 export type Speed = { label: string; value: string | number };

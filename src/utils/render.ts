@@ -113,15 +113,25 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
   if (typeof config.url === 'string') {
     if (config.isHls) {
       if (config.Hls.isSupported()) {
-        const hls = new config.Hls();
-        hls.loadSource(config.url);
-        hls.attachMedia(el.videoEl);
-        hls.on(config.Hls.Events.MANIFEST_PARSED, function (event, data) {
-          console.log(
-            'manifest loaded, found ' + data.levels.length + ' quality level'
-          );
+        toolConst.hls = new config.Hls({ maxBufferHole: 10, maxSeekHole: 10 });
+        toolConst.hls.loadSource(config.url);
+        toolConst.hls.attachMedia(el.videoEl);
+        toolConst.videoAddress = config.url;
+        toolConst.hls.on(config.Hls.Events.MANIFEST_PARSED, function (event, data) {
+          if (data.levels.length === 1) {
+            toolConst.hls.startLevel = -1;
+          } else {
+            const sources = data.levels.map((i, index) => ({
+              tag: `${i.height}P`,
+              source: index
+            }));
+            config.url = sources;
+            sources.push({ tag: '自动', source: -1, active: true });
+            el.videoSources = generateVideoSources(sources);
+            el.toolbarElRight.insertBefore(el.videoSources, el.toolbarElRight.childNodes[0]);
+            toolConst.hls.startLevel = -1;
+          }
         });
-        hls.startLevel = 1;
       }
     } else {
       // 不需要hls处理
