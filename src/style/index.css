@@ -556,3 +556,24 @@
 .uni-player-toast.fade-out{
   opacity: 0;
 }
+
+.uni-player-wrapper
+.uni-player-toolbar-left
+.uni-live {
+  width: 40px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+}
+
+.uni-player-wrapper
+.uni-player-toolbar-left
+.uni-live
+.uni-spot {
+  background-color: var(--main-color);
+  margin-right: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 6px;
+}

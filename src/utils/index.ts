@@ -185,3 +185,11 @@ export const generateVideoSources = (sources: Sources[]) => {
   </span>`
   return string2HtmlNode(string);
 }
+
+export const generateLiveTag = () => {
+  const string = `<div class="uni-logo uni-live">
+    <span class="uni-spot"></span>
+    <span>直播</span>
+  </div>`;
+  return string2HtmlNode(string);
+}

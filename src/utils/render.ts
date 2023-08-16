@@ -21,7 +21,8 @@ import {
   generateLoading,
   generateVoice,
   generateBottomProgress,
-  generateVideoSources
+  generateVideoSources,
+  generateLiveTag
 } from './index';
 import { formatTime } from './utils'
 
@@ -79,34 +80,52 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     speedPlay: generateSpeedPlay(speed),
     loadingEl: generateLoading(),
     voice: generateVoice(),
-    bottomProgress: generateBottomProgress()
+    bottomProgress: generateBottomProgress(),
+    liveTag: generateLiveTag()
   };
-
   el.videoEl.controls = false; // 关闭默认播放器控件
-  el.allEls.append(el.pausedIcon);
-  el.progress.appendChild(el.progressFull);
-  el.progress.appendChild(el.progresPlayed);
-  el.progress.appendChild(el.progresBuffer);
-  el.progress.appendChild(el.bar);
-  el.progress.appendChild(el.timeTip);
-  el.toolbarEl.appendChild(el.toolbarElLeft);
-  el.toolbarEl.appendChild(el.toolbarElRight);
-  el.toolbarEl.appendChild(el.progress);
-  el.toolbarElLeft.appendChild(el.playBtn);
-  el.toolbarElLeft.appendChild(el.pauseBtn);
-  el.toolbarElLeft.appendChild(el.timeEl);
 
-  el.toolbarElRight.appendChild(el.speedPlay);
-  el.toolbarElRight.appendChild(el.voice);
-  el.toolbarElRight.appendChild(el.fullScreenEntry);
-  el.toolbarElRight.appendChild(el.fullScreenExit);
+  if (config.live) {
+    el.toolbarElLeft.appendChild(el.playBtn);
+    el.toolbarElLeft.appendChild(el.pauseBtn);
+    el.toolbarElLeft.appendChild(el.liveTag);
+    el.toolbarEl.appendChild(el.toolbarElLeft);
+    el.toolbarEl.appendChild(el.toolbarElRight);
+    el.toolbarElRight.appendChild(el.voice);
+    el.toolbarElRight.appendChild(el.fullScreenEntry);
+    el.toolbarElRight.appendChild(el.fullScreenExit);
+    el.allEls.append(el.pausedIcon);
+    el.allEls.append(el.toolbarEl);
+    el.allEls.append(el.videoEl);
+    el.allEls.append(el.loadingEl)
+    el.videoWrapperEl.appendChild(el.allEls);
+  } else {
+    el.allEls.append(el.pausedIcon);
+    el.progress.appendChild(el.progressFull);
+    el.progress.appendChild(el.progresPlayed);
+    el.progress.appendChild(el.progresBuffer);
+    el.progress.appendChild(el.bar);
+    el.progress.appendChild(el.timeTip);
+    el.toolbarEl.appendChild(el.toolbarElLeft);
+    el.toolbarEl.appendChild(el.toolbarElRight);
+    el.toolbarEl.appendChild(el.progress);
+    el.toolbarElLeft.appendChild(el.playBtn);
+    el.toolbarElLeft.appendChild(el.pauseBtn);
+    el.toolbarElLeft.appendChild(el.timeEl);
+
+    el.toolbarElRight.appendChild(el.speedPlay);
+    el.toolbarElRight.appendChild(el.voice);
+    el.toolbarElRight.appendChild(el.fullScreenEntry);
+    el.toolbarElRight.appendChild(el.fullScreenExit);
 
 
-  el.allEls.append(el.toolbarEl);
-  el.allEls.append(el.bottomProgress);
-  el.allEls.append(el.videoEl)
-  el.allEls.append(el.loadingEl)
-  el.videoWrapperEl.appendChild(el.allEls);
+    el.allEls.append(el.toolbarEl);
+    el.allEls.append(el.bottomProgress);
+    el.allEls.append(el.videoEl)
+    el.allEls.append(el.loadingEl)
+    el.videoWrapperEl.appendChild(el.allEls);
+  }
+
 
 
   bindError(el, toolConst, config);

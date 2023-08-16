@@ -11,7 +11,8 @@ export interface UniPlayerConfig {
   autoPlay?: boolean;
   startTime?: number; // 开始播放的时间
   isHls?: boolean;
-  Hls?: any
+  Hls?: any,
+  live?: boolean // 是不是直播模式
 }
 
 export interface UniPlayerStatus extends UniPlayerConfig {
@@ -41,6 +42,7 @@ export interface El {
   voice: HTMLElement;
   bottomProgress: HTMLElement;
   videoSources?: HTMLElement;
+  liveTag: HTMLElement;
 }
 
 export interface ToolConst {
