@@ -12,7 +12,7 @@ import {
   setBottomProgress
 } from '../utils/videoBehavior';
 
-export default function bindBaseEvents (el: El, toolConst: ToolConst, config: UniPlayerConfig) {
+export default function (el: El, toolConst: ToolConst, config: UniPlayerConfig) {
   el.playBtn.addEventListener('click', function (e) {
     e.stopPropagation();
     el.videoEl.play();

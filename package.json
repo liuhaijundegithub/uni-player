@@ -6,5 +6,22 @@
   "repository": "https://github.com/liuhaijundegithub/uni-player",
   "author": "ORIGINALFAKER",
   "license": "MIT",
-  "private": false
+  "private": false,
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@rollup/plugin-alias": "^4.0.3",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/node": "^18.7.15",
+    "postcss": "^8.4.28",
+    "rollup": "^3.20.2",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.0"
+  },
+  "umdModuleName": "UniPlayer"
 }
