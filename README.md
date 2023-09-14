@@ -1,6 +1,6 @@
 # uni-player
 
-###安装
+### 安装
 ```cmd
 yarn add uni-player
 ```
