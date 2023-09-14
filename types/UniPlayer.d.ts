@@ -11,8 +11,10 @@ export interface UniPlayerConfig {
   autoPlay?: boolean;
   startTime?: number; // 开始播放的时间
   isHls?: boolean;
-  Hls?: any,
-  live?: boolean // 是不是直播模式
+  Hls?: any;
+  live?: boolean; // 是不是直播模式
+  isFlv?: boolean; // 是不是flv视频格式
+  Flv?: any // 是flv格式的时候需要传入Flv
 }
 
 export interface UniPlayerStatus extends UniPlayerConfig {

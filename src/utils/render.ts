@@ -152,8 +152,19 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
           }
         });
       }
+    } else if (config.isFlv) {
+      // flv视频
+      const Flv = config.Flv;
+      if (Flv.isSupported()) {
+        const flvPlayer = Flv.createPlayer({
+          type: 'flv',
+          url: config.url
+        });
+        flvPlayer.attachMediaElement(el.videoEl);
+        flvPlayer.load();
+      }
     } else {
-      // 不需要hls处理
+      // 不需要hls或者flv处理
       el.videoEl.src = config.url;
     }
   } else {
@@ -207,7 +218,7 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
 
 
   return {
-    videoEl: el.videoEl
+    el
   }
 }
 
