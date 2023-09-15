@@ -1,6 +1,6 @@
 import { elIsFullScreen } from '../utils/is';
 import { formatTime } from '../utils/utils';
-import { El, ToolConst } from '../../types/UniPlayer';
+import { El, ToolConst, UniCallBack } from '../../types/UniPlayer';
 
 export function setVideoPlay (el: HTMLVideoElement) {
   el.play();
@@ -15,11 +15,14 @@ export function initPlayerWrapperWidth (el: El, toolConst: ToolConst) {
   toolConst.playerClientLeft = el.videoWrapperEl.getBoundingClientRect().left;
   toolConst.maxRange = toolConst.playerWidth - 20 - 21;
 }
-export const fullScreen = (dom: HTMLElement, el: El, toolConst: ToolConst) => {
+export const fullScreen = (dom: HTMLElement, el: El, toolConst: ToolConst, callbacks: UniCallBack) => {
+  const onFullScreenStateChange = callbacks.get('fullScreenStateChange');
   if (elIsFullScreen()) {
     document.exitFullscreen();
+    onFullScreenStateChange && onFullScreenStateChange(false)
   } else {
     dom.requestFullscreen();
+    onFullScreenStateChange && onFullScreenStateChange(true)
   }
 }
 

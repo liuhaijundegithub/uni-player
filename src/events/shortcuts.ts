@@ -1,7 +1,7 @@
-import { El, ToolConst, UniPlayerConfig } from '../../types/UniPlayer';
+import { El, ToolConst, UniPlayerConfig, UniCallBack } from '../../types/UniPlayer';
 import { fullScreen, setVideoPlay, setVideoPause } from '../utils/videoBehavior';
 
-export default function bindShortCuts (el: El, toolConst: ToolConst, config: UniPlayerConfig) {
+export default function bindShortCuts (el: El, toolConst: ToolConst, config: UniPlayerConfig, callbacks: UniCallBack) {
   // 绑定快捷键
   document.addEventListener('keydown', function (e: KeyboardEvent) {
     const shortcuts = ['f', ' ']
@@ -12,12 +12,16 @@ export default function bindShortCuts (el: El, toolConst: ToolConst, config: Uni
     const TextareaFocus = document.querySelectorAll('textarea:focus').length;
     if (!inputFocus && !TextareaFocus) {
       if (key === 'f') {
-        fullScreen(el.videoWrapperEl, el, toolConst);
+        fullScreen(el.videoWrapperEl, el, toolConst, callbacks);
       }
       if (key === ' ') {
         const paused = el.videoEl.paused;
-        if (paused) setVideoPlay(el.videoEl)
-        else setVideoPause(el.videoEl);
+        if (paused) {
+          setVideoPlay(el.videoEl)
+        }
+        else {
+          setVideoPause(el.videoEl);
+        }
       }
     }
   })

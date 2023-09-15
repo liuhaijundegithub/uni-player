@@ -65,3 +65,14 @@ export interface ToolConst {
 }
 
 export type Speed = { label: string; value: string | number };
+
+export type UniPlayerEvent = 'ready' |
+  'playStateChange' |
+  'fullScreenStateChange' |
+  'playing' |
+  'waiting' |
+  'destoryed' |
+  'finished' |
+  'error'
+
+export type UniCallBack = Map<UniPlayerEvent, Function>

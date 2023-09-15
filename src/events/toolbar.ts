@@ -1,4 +1,4 @@
-import { El, ToolConst, UniPlayerConfig, Sources } from '../../types/UniPlayer';
+import { El, ToolConst, UniPlayerConfig, Sources, UniCallBack } from '../../types/UniPlayer';
 import {
   setBarPosition,
   setPlayedProgress
@@ -16,7 +16,7 @@ export const toogleBarScale = (bar: HTMLElement, hide: boolean, transtion = fals
   bar.style.transform = transforms.join(' ');
 }
 
-export default function bindToolbarEvents (el: El, toolConst: ToolConst, config: UniPlayerConfig) {
+export default function bindToolbarEvents (el: El, toolConst: ToolConst, config: UniPlayerConfig, callbacks: UniCallBack) {
 
   const volumeBar = document.querySelector('.uni-player-wrapper .volume-bar-progress .bar') as HTMLElement;
   const volumeProgressActive = document.querySelector('.uni-player-wrapper .volume-bar-progress .volume-bar-progress-active') as HTMLElement;

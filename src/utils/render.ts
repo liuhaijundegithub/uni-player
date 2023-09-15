@@ -26,7 +26,7 @@ import {
 } from './index';
 import { formatTime } from './utils'
 
-import { El, ToolConst } from '../../types/UniPlayer';
+import { El, ToolConst, UniCallBack } from '../../types/UniPlayer';
 
 import bindBaseEvents from '../events/base';
 import bindToolbarEvents, { toogleBarScale } from '../events/toolbar';
@@ -39,7 +39,7 @@ import { speed } from '../lib/config';
 
 
 
-const render = (container: HTMLElement, config: UniPlayerConfig) => {
+const render = (container: HTMLElement, config: UniPlayerConfig, callbacks: UniCallBack) => {
 
 
   const toolConst: ToolConst = {
@@ -128,7 +128,7 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
 
 
 
-  bindError(el, toolConst, config);
+  bindError(el, toolConst, config, callbacks);
   if (typeof config.url === 'string') {
     if (config.isHls) {
       if (config.Hls.isSupported()) {
@@ -197,9 +197,9 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
     setBarPosition(el.bar, -7);
     toogleBarScale(el.bar, true);
 
-    bindBaseEvents(el, toolConst, config);
-    bindToolbarEvents(el, toolConst, config);
-    bindShortcuts(el, toolConst, config);
+    bindBaseEvents(el, toolConst, config, callbacks);
+    bindToolbarEvents(el, toolConst, config, callbacks);
+    bindShortcuts(el, toolConst, config, callbacks);
 
 
     // 如果指定了开始播放的时间以及自动播放
@@ -216,6 +216,11 @@ const render = (container: HTMLElement, config: UniPlayerConfig) => {
   }
   container.appendChild(el.videoWrapperEl);
 
+  // 触发 ready事件
+  setTimeout(() => {
+    const onReady = callbacks.get('ready');
+    onReady && onReady();
+  });
 
   return {
     el

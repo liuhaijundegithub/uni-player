@@ -3,6 +3,8 @@
 ### 安装
 ```cmd
 yarn add uni-player
+or
+npm i uni-player
 ```
 ### 使用
 ```js
@@ -19,9 +21,9 @@ const player = new UniPlayer({
 |startTime|number|从何时开始播放（秒）|
 |autoplay|boolean|是否自动播放，关于 autoplay 属性设置问题请[参考](https://developer.chrome.com/blog/autoplay)|
 |isHls|boolean|是否为hls视频|
-|Hls|Hls|如果`isHls`为`true`，该属性必传（hls.js）|
+|Hls|Hls|如果 `isHls` 为 `true`，该属性必传（hls.js）|
 |isFlv|boolean|是否为flv视频|
-|Flv|Flv|如果`isFlv`为`true`，该属性必传（flv.js）|
+|Flv|Flv|如果 `isFlv` 为 `true`，该属性必传（flv.js）|
 |live|boolean|是否是直播模式|
 
 ### 方法
@@ -37,9 +39,16 @@ const player = new UniPlayer({
 
 ### 事件
 ```js
-player.on('eventName', function () {})
+player.on('eventName', function (...args) {})
 ```
 
 |名称|参数|描述|
 |:----|:----|:-----|
+|ready|无|播放器创建完成时调用|
 |playStateChange|(isPlay: boolean)|播放状态变化回调|
+|fullScreenStateChange|(isFullScreen: boolean)|全屏状态变化|
+|playing|无|播放中触发|
+|waiting|无|视频等待中触发|
+|destroyed|无|播放器被摧毁后触发|
+|finished|无|视频播放完成触发|
+|error|无|视频播放错误|

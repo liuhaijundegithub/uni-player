@@ -1,11 +1,12 @@
 import { isValidContainer } from '../utils/is';
-import { UniPlayerConfig, UniPlayerStatus, El } from '../../types/UniPlayer';
+import { UniPlayerConfig, UniPlayerStatus, El, UniPlayerEvent, UniCallBack } from '../../types/UniPlayer';
 import render from '../utils/render';
 import { getWrapper } from '../utils/index';
 
 class UniPlayer {
   private config: UniPlayerStatus
   private el: El | null;
+  private callbacks: UniCallBack  = new Map<UniPlayerEvent, Function>([])
   constructor (config: UniPlayerConfig) {
     this.config = {
       ...config
@@ -16,7 +17,8 @@ class UniPlayer {
     if (isValidContainer(container)) {
       const { el } = render(
         getWrapper(container) as HTMLElement,
-        config
+        config,
+        this.callbacks
       );
       this.el = el;
     }
@@ -44,7 +46,13 @@ class UniPlayer {
   // 销毁播放器
   destory () {
     const el = document.querySelector(this.config.container as string);
-    el.innerHTML = '';
+    this.el.videoEl.pause();
+    const child = el.childNodes[0]
+    el.removeChild(child);
+    setTimeout(() => {
+      const onDestoryed = this.callbacks.get('destoryed');
+      onDestoryed && onDestoryed();
+    })
   }
 
   // 跳转播放
@@ -65,6 +73,10 @@ class UniPlayer {
     volumeValue.innerText = String(value);
     volumeBar.style.transform = `translateY(${top}px)`;
     volumeProgressActive.style.top = top + 'px';
+  }
+
+  on (eventName: UniPlayerEvent, func: Function) {
+    this.callbacks.set(eventName, func);
   }
 }
 

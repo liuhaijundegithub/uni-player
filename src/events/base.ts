@@ -1,4 +1,4 @@
-import { El, ToolConst, UniPlayerConfig } from '../../types/UniPlayer';
+import { El, ToolConst, UniPlayerConfig, UniCallBack } from '../../types/UniPlayer';
 import {
   setVideoPause,
   setVideoPlay,
@@ -12,7 +12,7 @@ import {
   setBottomProgress
 } from '../utils/videoBehavior';
 
-export default function (el: El, toolConst: ToolConst, config: UniPlayerConfig) {
+export default function (el: El, toolConst: ToolConst, config: UniPlayerConfig, callbacks: UniCallBack) {
   el.playBtn.addEventListener('click', function (e) {
     e.stopPropagation();
     el.videoEl.play();
@@ -26,8 +26,23 @@ export default function (el: El, toolConst: ToolConst, config: UniPlayerConfig) 
   // 绑定全屏事件
   el.videoWrapperEl.addEventListener('dblclick', function () {
     clearTimeout(toolConst.clickTimer);
-    fullScreen(el.videoWrapperEl, el, toolConst);
+    fullScreen(el.videoWrapperEl, el, toolConst, callbacks);
   });
+
+  el.videoEl.addEventListener('play', function () {
+    const onPlayStateChange = callbacks.get('playStateChange');
+    onPlayStateChange && onPlayStateChange(true)
+    el.playBtn.classList.add('hide');
+    el.pauseBtn.classList.remove('hide');
+    el.pausedIcon.classList.add('hide');
+  })
+  el.videoEl.addEventListener('pause', function () {
+    const onPlayStateChange = callbacks.get('playStateChange');
+    onPlayStateChange && onPlayStateChange(false)
+    el.pauseBtn.classList.add('hide');
+    el.playBtn.classList.remove('hide');
+    el.pausedIcon.classList.remove('hide');
+  })
 
   // 绑定 点击暂停/播放事件
   el.videoWrapperEl.addEventListener('click', function (e) {
@@ -60,29 +75,25 @@ export default function (el: El, toolConst: ToolConst, config: UniPlayerConfig) 
     delayHideToolbar(el, toolConst)
   })
 
-  el.videoEl.onplay = () => {
-    el.playBtn.classList.add('hide');
-    el.pauseBtn.classList.remove('hide');
-    el.pausedIcon.classList.add('hide');
-  }
-  el.videoEl.onpause = () => {
-    el.pauseBtn.classList.add('hide');
-    el.playBtn.classList.remove('hide');
-    el.pausedIcon.classList.remove('hide');
-  }
-
   el.videoEl.addEventListener('timeupdate', function (e: any) {
     !toolConst.isMouseDown && timeupdate();
+    const onPlaying = callbacks.get('playing');
+    onPlaying && onPlaying();
+  })
+
+  el.videoEl.addEventListener('ended', function () {
+    const onFinished = callbacks.get('finished')
+    onFinished && onFinished();
   })
 
   // 点击右下角全屏
   el.fullScreenEntry.addEventListener('click', function () {
-    fullScreen(el.videoWrapperEl, el, toolConst);
+    fullScreen(el.videoWrapperEl, el, toolConst, callbacks);
   })
 
   // 点击右下角取消全屏
   el.fullScreenExit.addEventListener('click', function () {
-    fullScreen(el.videoWrapperEl, el, toolConst);
+    fullScreen(el.videoWrapperEl, el, toolConst, callbacks);
   });
 
   // 倍速播放
@@ -126,6 +137,8 @@ export default function (el: El, toolConst: ToolConst, config: UniPlayerConfig) 
     bufferUpdate();
   })
   el.videoEl.addEventListener('waiting', function () {
+    const onWaiting = callbacks.get('waiting');
+    onWaiting && onWaiting();
     toolConst.loadingTimer = setTimeout(() => {
       el.loadingEl.classList.remove('hide');
     }, 1000);
