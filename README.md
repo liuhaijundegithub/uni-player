@@ -36,3 +36,10 @@ const player = new UniPlayer({
 |player.destory()|销毁播放器|
 
 ### 事件
+```js
+player.on('eventName', function () {})
+```
+
+|名称|参数|描述|
+|:----|:----|:-----|
+|playStateChange|(isPlay: boolean)|播放状态变化回调|
