@@ -15,6 +15,7 @@ export interface UniPlayerConfig {
   live?: boolean; // 是不是直播模式
   isFlv?: boolean; // 是不是flv视频格式
   Flv?: any // 是flv格式的时候需要传入Flv
+  theme?: string; // 主题颜色
 }
 
 export interface UniPlayerStatus extends UniPlayerConfig {

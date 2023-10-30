@@ -126,6 +126,9 @@ const render = (container: HTMLElement, config: UniPlayerConfig, callbacks: UniC
     el.videoWrapperEl.appendChild(el.allEls);
   }
 
+  // 注入主题色
+  el.videoWrapperEl.style.setProperty('--main-color', config.theme || '#4a97fc')
+
 
 
   bindError(el, toolConst, config, callbacks);

@@ -25,6 +25,7 @@ const player = new UniPlayer({
 |isFlv|boolean|是否为flv视频|
 |Flv|Flv|如果 `isFlv` 为 `true`，该属性必传（flv.js）|
 |live|boolean|是否是直播模式|
+|theme|string|主题颜色|
 
 ### 方法
 |名称|描述|
