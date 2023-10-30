@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "A H5 Desktop Video Player",
   "main": "src/main.ts",
-  "repository": "https://github.com/liuhaijundegithub/uni-player",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/liuhaijundegithub/uni-player"
+  },
+  "keywords": ["video", "video player", "H5 player"],
   "author": "ORIGINALFAKER",
   "license": "MIT",
   "private": false,
