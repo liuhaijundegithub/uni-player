@@ -37,6 +37,7 @@ const player = new UniPlayer({
 |player.skipTo(time: number)|跳转至指定时间|
 |player.setVolume(value: number)|设置音量（0-100）|
 |player.destory()|销毁播放器|
+|player.reload(config: Partial<UniPlayerConfig>)|重新加载播放器|
 
 ### 事件
 ```js

@@ -7,7 +7,12 @@ class UniPlayer {
   private config: UniPlayerStatus
   private el: El | null;
   private callbacks: UniCallBack  = new Map<UniPlayerEvent, Function>([])
+  
   constructor (config: UniPlayerConfig) {
+    this.init(config)
+  }
+
+  private init (config: UniPlayerConfig) {
     this.config = {
       ...config
     };
@@ -23,6 +28,7 @@ class UniPlayer {
       this.el = el;
     }
   }
+
 
   play () {
     this.el.videoEl?.play();
@@ -73,6 +79,15 @@ class UniPlayer {
     volumeValue.innerText = String(value);
     volumeBar.style.transform = `translateY(${top}px)`;
     volumeProgressActive.style.top = top + 'px';
+  }
+
+  // 重新加载
+  reload (config: Partial<UniPlayerConfig>) {
+    this.destory();
+    this.init({
+      ...this.config,
+      ...config
+    })
   }
 
   on (eventName: UniPlayerEvent, func: Function) {
