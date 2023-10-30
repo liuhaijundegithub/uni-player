@@ -13,7 +13,7 @@ const player = new UniPlayer({
   url: 'video link address'
 })
 ```
-#### 详细配置
+#### 详细配置(UniPlayerConfig)
 |参数|类型|描述|
 |:--------|:-------|:--------|
 |container|string|css selector 播放器容器元素|
@@ -34,10 +34,10 @@ const player = new UniPlayer({
 |player.pause()|暂停播放|
 |player.requestFullScreen()|全屏播放|
 |player.cancelFullScreen()|取消全屏播放|
-|player.skipTo(time: number)|跳转至指定时间|
-|player.setVolume(value: number)|设置音量（0-100）|
+|player.skipTo(time: `number`)|跳转至指定时间|
+|player.setVolume(value: `number`)|设置音量（0-100）|
 |player.destory()|销毁播放器|
-|player.reload(config: Partial<UniPlayerConfig>)|重新加载播放器|
+|player.reload(config: `Partial<UniPlayerConfig>`)|重新加载播放器|
 
 ### 事件
 ```js
