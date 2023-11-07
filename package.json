@@ -1,7 +1,7 @@
 {
   "name": "uni-player",
   "version": "1.0.1",
-  "description": "A H5 Desktop Video Player",
+  "description": "A Video Player Plugin For JavaScript",
   "main": "src/main.ts",
   "repository": {
     "type": "git",
