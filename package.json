@@ -1,6 +1,6 @@
 {
   "name": "uni-player",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A Video Player Plugin For JavaScript",
   "main": "src/main.ts",
   "repository": {
