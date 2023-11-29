@@ -40,7 +40,7 @@ export function toolbarFadeOutAndHide (el: El, toolConst: ToolConst) {
     el.toolbarEl.classList.remove('show');
     setTimeout(() => {
       el.toolbarEl.onanimationend = null;
-    }, 200)
+    }, 0)
   }
 }
 
@@ -54,11 +54,11 @@ export function delayHideToolbar (el: El, toolConst: ToolConst) {
 
 export function setPlayedProgress (el:El, toolConst: ToolConst, x: number) {
   const right = toolConst.maxRange - x;
-  el.progresPlayed.style.right = right + 'px';
+  el.progresPlayed.style.right = (right < 0 ? 0 : right) + 'px';
 }
 export function setBottomProgress (el:El, toolConst: ToolConst, x: number) {
   const right = toolConst.playerWidth - x;
-  el.bottomProgress.style.right = right + 'px';
+  el.bottomProgress.style.right = (right < 0 ? 0 : right) + 'px';
 }
 
 export const setBarPosition = (
@@ -69,6 +69,7 @@ export const setBarPosition = (
   videoTime?: number
 ) => {
   let transforms = bar.style.transform.split(' ');
+  value < 0 ?  0 : value;
   if (transforms.some(i => i.includes('translateX'))) {
     transforms = transforms.filter(i => !i.includes('translateX') && Boolean(i));
     transforms.push(`translateX(${value}px)`);

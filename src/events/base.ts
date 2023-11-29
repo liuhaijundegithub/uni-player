@@ -183,7 +183,7 @@ export default function (el: El, toolConst: ToolConst, config: UniPlayerConfig, 
     try {
       const bufferTime = el.videoEl.buffered.end(0)
       const right = (bufferTime / toolConst.videoTime) * toolConst.maxRange;
-      el.progresBuffer.style.right = (toolConst.maxRange - right) + 'px';
+      el.progresBuffer.style.right = ((toolConst.maxRange - right) < 0 ? 0 : (toolConst.maxRange - right)) + 'px';
     } catch {
       el.progresBuffer.style.right = toolConst.maxRange + 'px';
     }
