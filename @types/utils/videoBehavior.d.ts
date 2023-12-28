@@ -1,0 +1,11 @@
+import { El, ToolConst, UniCallBack } from '../../types/UniPlayer';
+export declare function setVideoPlay(el: HTMLVideoElement): void;
+export declare function setVideoPause(el: HTMLVideoElement): void;
+export declare function initPlayerWrapperWidth(el: El, toolConst: ToolConst): void;
+export declare const fullScreen: (dom: HTMLElement, el: El, toolConst: ToolConst, callbacks: UniCallBack) => void;
+export declare function setTime(el: El, toolConst: ToolConst): void;
+export declare function toolbarFadeOutAndHide(el: El, toolConst: ToolConst): void;
+export declare function delayHideToolbar(el: El, toolConst: ToolConst): void;
+export declare function setPlayedProgress(el: El, toolConst: ToolConst, x: number): void;
+export declare function setBottomProgress(el: El, toolConst: ToolConst, x: number): void;
+export declare const setBarPosition: (bar: HTMLElement, value: number, videoEl?: HTMLVideoElement, allWidth?: number, videoTime?: number) => void;
