@@ -11,12 +11,16 @@
   "keywords": [
     "video",
     "video player",
-    "H5 player"
+    "H5 player",
+    "hls",
+    "flv",
+    "video",
+    "uni-player",
+    "uniplayer"
   ],
   "author": "ORIGINALFAKER",
   "license": "MIT",
   "private": false,
-  "type": "module",
   "exports": {
     ".": {
       "import": "./dist/index.js",
