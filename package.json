@@ -20,11 +20,5 @@
   ],
   "author": "ORIGINALFAKER",
   "license": "MIT",
-  "private": false,
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "umd": "./dist/index-umd.js"
-    }
-  }
+  "private": false
 }
