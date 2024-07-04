@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="container" style="height: 600px; width: 800px"></div>
+  <script type="module">
+    import UniPlayer from './dist/esm/index.js';
+    (function () {
+      const player = new UniPlayer({
+        container: document.getElementById('container'),
+        url: 'https://media.w3.org/2010/05/sintel/trailer.mp4',
+      });
+    })()
+  </script>
+</body>
+</html>

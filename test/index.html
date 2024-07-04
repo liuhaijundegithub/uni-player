@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<script src="../dist/bundle/index.js"></script>
+<body>
+  <div id="player"></div>
+  <script>
+    console.log(UniPlayer);
+    (function () {
+        const player = new UniPlayer({
+        container: '#player',
+        // startTime: 60,
+        // autoPlay: true,
+        url: 'http://smartcampus-test.jyjyapp.com/static/starboy.1080P.mp4',
+        // url: 'https://boardmix-public.oss-accelerate.aliyuncs.com/cms/video/boardmix-ai2.mp4',
+        // url: 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+        // url: 'https://yunqivedio.alicdn.com/2017yq/v2/0x0/96d79d3f5400514a6883869399708e11/96d79d3f5400514a6883869399708e11.m3u8',
+        // url: './test.mp4',
+        // url: 'https://video.xuece.cn/acdb47903a8471ee80106733a68f0102/23e6b16983a94afdb3d62d3084c74cdb.m3u8?auth_key=1692101260-ff6b30a46077470aadd9aadb358fe207-0-c2f7dc089262962dca1b601db0467856',
+        // isHls: true,
+        // live: true,
+        // Hls
+        // url: [
+        //   { source: 'http://smartcampus-test.jyjyapp.com/static/starboy.480P.mp4', tag: '标清', active: true },
+        //   { source: 'http://smartcampus-test.jyjyapp.com/static/starboy.1080P.mp4', tag: '1080P' }
+        // ]
+      });
+    })();
+  </script>
+</body>
+</html>
